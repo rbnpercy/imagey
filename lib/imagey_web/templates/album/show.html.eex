@@ -1,0 +1,20 @@
+<h2>Show Album</h2>
+
+<ul>
+
+  <li>
+    <strong>Name:</strong>
+    <%= @album.name %>
+  </li>
+
+  <%= for photo <- @album.photos do %>
+  <li>
+    <%= photo.image %>
+  </li>
+  <% end %>
+
+
+</ul>
+
+<span><%= link "Edit", to: album_path(@conn, :edit, @album) %></span>
+<span><%= link "Back", to: album_path(@conn, :index) %></span>

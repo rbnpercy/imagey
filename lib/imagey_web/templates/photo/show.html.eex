@@ -1,0 +1,13 @@
+<h2>Show Photo</h2>
+
+<ul>
+
+  <li>
+    <strong>Image:</strong>
+    <%= @photo.image %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: photo_path(@conn, :edit, @photo) %></span>
+<span><%= link "Back", to: photo_path(@conn, :index) %></span>

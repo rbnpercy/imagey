@@ -17,6 +17,9 @@ defmodule ImageyWeb.Router do
     pipe_through :browser # Use the default browser stack
 
     get "/", PageController, :index
+    resources "/albums", AlbumController
+    resources "/photos", PhotoController
+
   end
 
   # Other scopes may use custom stacks.
