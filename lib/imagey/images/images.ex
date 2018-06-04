@@ -118,6 +118,7 @@ defmodule Imagey.Images do
   """
   def list_photos do
     Repo.all(Photo)
+    |> Repo.preload(:album)
   end
 
   @doc """
@@ -134,7 +135,10 @@ defmodule Imagey.Images do
       ** (Ecto.NoResultsError)
 
   """
-  def get_photo!(id), do: Repo.get!(Photo, id)
+  def get_photo!(id) do
+    Repo.get!(Photo, id)
+    |> Repo.preload(:album)
+  end
 
   @doc """
   Creates a photo.

@@ -11,6 +11,7 @@ defmodule ImageyWeb.Endpoint do
     at: "/", from: :imagey, gzip: false,
     only: ~w(css fonts images js favicon.ico robots.txt)
 
+
   # Code reloading can be explicitly enabled under the
   # :code_reloader configuration of your endpoint.
   if code_reloading? do

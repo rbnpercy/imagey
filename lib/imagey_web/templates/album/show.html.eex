@@ -1,11 +1,6 @@
-<h2>Show Album</h2>
+<h2><%= @album.name %></h2>
 
 <ul>
-
-  <li>
-    <strong>Name:</strong>
-    <%= @album.name %>
-  </li>
 
   <%= for photo <- @album.photos do %>
   <li>
