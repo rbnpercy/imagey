@@ -14,42 +14,57 @@ defmodule ImageyWeb.PhotoController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  def upload(photos) do
-    Enum.map(photos, fn(upload) ->
-      ext = Path.extname(upload.filename)
-      u = Ecto.UUID.generate
-      flnm = "#{u}#{ext}"
+  # def upload(photos) do
+  #   Enum.map(photos, fn(upload) ->
+  #     ext = Path.extname(upload.filename)
+  #     u = Ecto.UUID.generate
+  #     flnm = "#{u}#{ext}"
+  #
+  #     {:ok, file_binary} = File.read(upload.path)
+  #
+  #     s3_bucket = "imagey-elixir"
+  #     {:ok, _} =
+  #       ExAws.S3.put_object(s3_bucket, flnm, file_binary)
+  #       |> ExAws.request()
+  #
+  #     IO.puts flnm
+  #   end)
+  #
+  # end
 
-      {:ok, file_binary} = File.read(upload.path)
-
-      s3_bucket = "imagey-elixir"
-      {:ok, _} =
-        ExAws.S3.put_object(s3_bucket, flnm, file_binary)
-        |> ExAws.request()
-
-      IO.puts flnm
-    end)
-
-  end
-
-  def create(conn, %{"photo" => %{"image" => image_params} = photo_params}) do
-
-    upload(image_params)
-
-      # for img <- u do
-      #
-      # end
-
-      # IO.inspect photo_params
-
-    case Images.create_photo(photo_params) do
+  def store(conn, file, album) do
+    case Images.create_photo(%{album_id: album, image: file}) do
       {:ok, photo} ->
         conn
-        |> put_flash(:info, "Photo created successfully.")
+        |> put_flash(:info, "Photos created successfully.")
         |> redirect(to: photo_path(conn, :show, photo))
+        ##  WE NEED TO REDIRECT TO ALBUM
+
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end
+  end
+
+  def create(conn, %{"photo" => %{"image" => image_params} = photo_params}) do
+      album_id = photo_params["album_id"]
+
+      Enum.map(image_params, fn(img) ->
+        album = album_id
+        ext = Path.extname(img.filename)
+        u = Ecto.UUID.generate
+        flnm = "#{u}#{ext}"
+
+        {:ok, file_binary} = File.read(img.path)
+
+        s3_bucket = "imagey-elixir"
+        {:ok, _} =
+          ExAws.S3.put_object(s3_bucket, flnm, file_binary)
+          |> ExAws.request()
+
+        store(conn, flnm, album)
+      end)
+
+
   end
 
   def show(conn, %{"id" => id}) do

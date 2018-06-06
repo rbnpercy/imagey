@@ -3,6 +3,11 @@
 <ul>
 
   <li>
+    <strong>Album:</strong>
+    <%= @photo.album_id %>
+  </li>
+
+  <li>
     <strong>Image:</strong>
     <%= @photo.image %>
   </li>
