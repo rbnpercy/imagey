@@ -37,8 +37,7 @@ defmodule ImageyWeb.PhotoController do
       {:ok, photo} ->
         conn
         |> put_flash(:info, "Photos created successfully.")
-        |> redirect(to: photo_path(conn, :show, photo))
-        ##  WE NEED TO REDIRECT TO ALBUM
+        |> redirect(to: album_path(conn, :show, album))
 
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
@@ -63,9 +62,8 @@ defmodule ImageyWeb.PhotoController do
 
         store(conn, flnm, album)
       end)
-
-
   end
+
 
   def show(conn, %{"id" => id}) do
     photo = Images.get_photo!(id)

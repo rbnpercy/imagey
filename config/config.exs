@@ -28,9 +28,9 @@ config :ex_aws,
   access_key_id: "AKIAJJIQPDHXSDARCI5Q",
   secret_access_key: "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",
   s3: [
-   scheme: "https://",
-   host: "imagey-elixir.s3.amazonaws.com",
-   region: "eu-west-2" 
+    scheme: "https://",
+    host: "imagey-elixir.s3.amazonaws.com",
+    region: "eu-west-2"
   ]
 
 # Import environment specific config. This must remain at the bottom

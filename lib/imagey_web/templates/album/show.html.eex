@@ -4,11 +4,9 @@
 
   <%= for photo <- @album.photos do %>
   <li>
-    <%= photo.image %>
+    <img src=<%= "https://s3.eu-west-2.amazonaws.com/imagey-elixir/imagey-elixir/" <> photo.image %> />
   </li>
   <% end %>
-
-
 </ul>
 
 <span><%= link "Edit", to: album_path(@conn, :edit, @album) %></span>
