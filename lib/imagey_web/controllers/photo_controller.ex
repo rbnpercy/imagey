@@ -14,24 +14,6 @@ defmodule ImageyWeb.PhotoController do
     render(conn, "new.html", changeset: changeset)
   end
 
-  # def upload(photos) do
-  #   Enum.map(photos, fn(upload) ->
-  #     ext = Path.extname(upload.filename)
-  #     u = Ecto.UUID.generate
-  #     flnm = "#{u}#{ext}"
-  #
-  #     {:ok, file_binary} = File.read(upload.path)
-  #
-  #     s3_bucket = "imagey-elixir"
-  #     {:ok, _} =
-  #       ExAws.S3.put_object(s3_bucket, flnm, file_binary)
-  #       |> ExAws.request()
-  #
-  #     IO.puts flnm
-  #   end)
-  #
-  # end
-
   def store(conn, file, album) do
     case Images.create_photo(%{album_id: album, image: file}) do
       {:ok, photo} ->
@@ -47,6 +29,9 @@ defmodule ImageyWeb.PhotoController do
   def create(conn, %{"photo" => %{"image" => image_params} = photo_params}) do
       album_id = photo_params["album_id"]
 
+      ExAws.S3.put_bucket("#{album_id}", "")
+      |> ExAws.request()
+
       Enum.map(image_params, fn(img) ->
         album = album_id
         ext = Path.extname(img.filename)
@@ -55,7 +40,7 @@ defmodule ImageyWeb.PhotoController do
 
         {:ok, file_binary} = File.read(img.path)
 
-        s3_bucket = "imagey-elixir"
+        s3_bucket = album
         {:ok, _} =
           ExAws.S3.put_object(s3_bucket, flnm, file_binary)
           |> ExAws.request()
@@ -98,17 +83,4 @@ defmodule ImageyWeb.PhotoController do
     |> redirect(to: photo_path(conn, :index))
   end
 
-  defp multisend_to_s3 do
-    upload_file = fn {src_path, dest_path} ->
-      ExAws.S3.put_object("imagey-elixir", dest_path, File.read!(src_path))
-      |> ExAws.request!
-    end
-
-    paths = %{"path/to/src0" => "path/to/dest0", "path/to/src1" => "path/to/dest1"}
-
-    paths
-    |> Task.async_stream(upload_file, max_concurrency: 20)
-    |> Stream.run
-
-  end
 end
