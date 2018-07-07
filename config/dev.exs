@@ -51,7 +51,7 @@ config :phoenix, :stacktrace_depth, 20
 config :imagey, Imagey.Repo,
   adapter: Ecto.Adapters.Postgres,
   username: "imagey_dev",
-  password: "a4Fr5Dgg",
+  password: "",
   database: "imagey_dev",
   hostname: "localhost",
   pool_size: 10

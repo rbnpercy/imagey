@@ -25,12 +25,12 @@ config :logger, :console,
 
 # Configure :ex_aws
 config :ex_aws,
-  access_key_id: "AKIAJJIQPDHXSDARCI5Q",
-  secret_access_key: "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",
+  access_key_id: "",
+  secret_access_key: "",
   s3: [
     scheme: "https://",
-    host: "imagey-elixir.s3.amazonaws.com",
-    region: "eu-west-2"
+    host: "s3.amazonaws.com",
+    region: "us-east-1"
   ]
 
 # Import environment specific config. This must remain at the bottom

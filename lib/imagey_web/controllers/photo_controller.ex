@@ -17,6 +17,11 @@ defmodule ImageyWeb.PhotoController do
   def store(conn, file, album) do
     case Images.create_photo(%{album_id: album, image: file}) do
       {:ok, photo} ->
+
+        header = [{"Content-Type", "application/json"}]
+        body = "{\"height\": \"250\", \"width\": \"250\", \"bucket\": \"#{album_id}\" }"
+        HTTPotion.post("https://worker-aws-us-east-1.iron.io/2/projects/{Project ID}/tasks", [body: body, headers: header])
+
         conn
         |> put_flash(:info, "Photos created successfully.")
         |> redirect(to: album_path(conn, :show, album))
@@ -29,7 +34,7 @@ defmodule ImageyWeb.PhotoController do
   def create(conn, %{"photo" => %{"image" => image_params} = photo_params}) do
       album_id = photo_params["album_id"]
 
-      ExAws.S3.put_bucket("#{album_id}", "")
+      ExAws.S3.put_bucket("#{album_id}", "eu-west-2")
       |> ExAws.request()
 
       Enum.map(image_params, fn(img) ->
