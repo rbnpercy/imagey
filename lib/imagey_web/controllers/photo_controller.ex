@@ -20,7 +20,7 @@ defmodule ImageyWeb.PhotoController do
 
         header = [{"Content-Type", "application/json"}]
         body = "{\"height\": \"250\", \"width\": \"250\", \"bucket\": \"#{album_id}\" }"
-        HTTPotion.post("https://worker-aws-us-east-1.iron.io/2/projects/{Project ID}/tasks", [body: body, headers: header])
+        HTTPotion.post("https://AWS_WORKER/2/projects/{Project ID}/tasks", [body: body, headers: header])
 
         conn
         |> put_flash(:info, "Photos created successfully.")
